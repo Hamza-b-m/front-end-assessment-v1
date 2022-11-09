@@ -1,19 +1,19 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {Link} from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
 import ProductForm from '../Update/ProductForm';
 import {createProductForm} from '../../../actions/products';
 
 class AddFormContainer extends Component {
     render() {
-        const {categories, dispatch} = this.props;
+        const {categories, dispatch, ...rest} = this.props;
 
         return (
             <>
                 <Link to='/'>Home</Link>
                 <ProductForm
-                    onSave={(data) => {return;}}
+                    onSave={(data) => createProductForm(data)(dispatch, rest)}
                     categories={categories}
                 />
             </>
@@ -31,4 +31,4 @@ const mapStateToProps = (state) => {
     }
 };
 
-export default connect(mapStateToProps)(AddFormContainer);
+export default connect(mapStateToProps)(withRouter(AddFormContainer));

@@ -1,8 +1,8 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import {Button, Form, FormFeedback, FormGroup, Input, Label} from 'reactstrap';
 import {getMultiSelected, repeat} from '../../../utils';
-import {isCategoriesValid, isNameValid} from './validators';
+import {isCategoriesValid, isExpirationDateValid, isNameValid} from './validators';
 
 const ProductForm = (props) => {
     const {product = {}} = props;
@@ -13,7 +13,20 @@ const ProductForm = (props) => {
     const [itemsInStock, setItemsInStock] = useState(product.itemsInStock || 0);
     const [receiptDate, setReceiptDate] = useState(product.receiptDate || '');
     const [expirationDate, setExpirationDate] = useState(product.expirationDate || '');
-    const [featured, setFeatured] = useState(product.featured);
+    const [featured, setFeatured] = useState(product.featured || false);
+
+    useEffect(() => {
+        if (rating > 8 && !featured) {
+                setFeatured(true)
+                return;
+            }
+        if (rating < 9 && featured) {
+                setFeatured(false)
+                return;
+            }
+    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [rating])   
 
     const onSubmit = (e) => {
         e.preventDefault();
@@ -95,6 +108,7 @@ const ProductForm = (props) => {
             <FormGroup>
                 <Label for="expirationDate">Expiration date</Label>
                 <Input
+                    invalid={!isExpirationDateValid(expirationDate)}
                     type="date"
                     name="expirationDate"
                     id="expirationDate"
@@ -113,7 +127,7 @@ const ProductForm = (props) => {
             <FormGroup check>
                 <Label check>
                     <Input type="checkbox" checked={featured}
-                           onChange={({target}) => setFeatured(target.checked)}
+                        readOnly
                     />{' '}
                     Featured
                 </Label>
