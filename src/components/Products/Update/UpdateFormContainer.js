@@ -3,12 +3,12 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {getProductById} from '../../../reducers/products';
 import ProductForm from './ProductForm';
-import {Link, withRouter} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import {updateProductForm} from '../../../actions/products';
 
 class UpdateFormContainer extends Component {
     render() {
-        const {product, categories, dispatch, ...rest} = this.props;
+        const {product, categories, dispatch} = this.props;
 
         if (!product) {
             return null;
@@ -18,7 +18,7 @@ class UpdateFormContainer extends Component {
             <>
                 <Link to='/'>Home</Link>
                 <ProductForm
-                    onSave={(data) => updateProductForm(product.id, data)(dispatch, rest )}
+                    onSave={(data) => dispatch(updateProductForm(product.id, data))}
                     product={product}
                     categories={categories}
                 />
@@ -40,4 +40,4 @@ const mapStateToProps = (state, {productId}) => {
     }
 };
 
-export default connect(mapStateToProps)(withRouter(UpdateFormContainer));
+export default connect(mapStateToProps)(UpdateFormContainer);

@@ -5,7 +5,7 @@ const requestCategories = () => ({
   type: REQUEST_CATEGORIES,
 });
 
-const receiveCategories = (json) => ({
+export const receiveCategories = (json) => ({
   type: RECEIVE_CATEGORIES,
   categories: json.map(category => category),
 });

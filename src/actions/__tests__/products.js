@@ -1,4 +1,5 @@
-import {CREATE_PRODUCT, createProductForm, UPDATE_PRODUCT, updateProductForm} from '../products';
+import { productApi } from '../../gateways/ProductApi';
+import {CREATE_PRODUCT, createProductForm, UPDATE_PRODUCT, REQUEST_PRODUCTS, RECEIVE_PRODUCTS, updateProductForm, fetchProducts} from '../products';
 
 describe('products', () => {
 	let dispatch;
@@ -48,6 +49,27 @@ describe('products', () => {
 
 			expect(history.push).toHaveBeenCalled();
 			expect(history.push.mock.calls[0][0]).toBe('/');
+		})
+	})
+
+	describe('fetchProducts', () => {
+		beforeEach(() => {
+			dispatch = jest.fn();
+		})
+
+		it('request products', () => {
+			fetchProducts()(dispatch);
+
+			expect(dispatch).toHaveBeenCalled();
+			expect(dispatch.mock.calls[0][0].type).toBe(REQUEST_PRODUCTS);
+		})
+
+		it('receive products', () => {
+			fetchProducts()(dispatch);
+
+			expect(dispatch).toHaveBeenCalled();
+			expect(dispatch.mock.calls[1][0].type).toBe(RECEIVE_PRODUCTS);
+			expect(dispatch.mock.calls[1][0].products).toMatchObject(productApi.getProducts());
 		})
 	})
 });
